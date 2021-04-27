@@ -3,7 +3,7 @@ import Features from '../models/features';
 
 export default class FeaturesService {
 
-  convertWeatherToFeatures = (weather) => {
+  convertWeatherToFeatures(weather) {
     const wind = Number(weather.wind);
     const temp = Number(weather.temp);
     let audioFeatures = new Features('','','','',[]);
