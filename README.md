@@ -1,6 +1,6 @@
 # Weather-Spotifier (Svelte Version)
 
-This is an alternative version of my [Weather-Spotifier](https://github.com/KCM78/weather-spotifier) app that uses `Svelte` rather than `Angular` for the frontend code. This was done really as an experiment to play with `Svelte`, but having done so, I much prefer this over the `Angular` version.
+This is an alternative version of my deprecated [Weather-Spotifier](https://github.com/KCM78/weather-spotifier) app that uses `Svelte` rather than `Angular` for the frontend code. This was done really as an experiment to play with `Svelte`, but having done so, I much prefer this over the `Angular` version.
 
 
 ## How to Use
