@@ -1,9 +1,9 @@
 <script>
-	import Form from './Form.svelte';
+	import MainContent from './MainContent.svelte';
 </script>
 
 <main>
-	<Form/>
+	<MainContent/>
 </main>
 
 <style>

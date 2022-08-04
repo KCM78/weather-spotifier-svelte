@@ -1,3 +1,13 @@
+const groupMapper = {
+  '2': 'thunderstormGenres',
+  '3': 'drizzleGenres',
+  '5': 'rainGenres',
+  '6': 'snowGenres',
+  '7': 'atmosphereGenres',
+  '800': 'clearGenres',
+  '8': 'cloudGenres'
+}
+
 const thunderstormGenres = [
   'black-metal',
   'metalcore',
@@ -54,6 +64,7 @@ const cloudGenres = [
   'pop',
 ];
 export {
+  groupMapper,
   thunderstormGenres,
   drizzleGenres,
   rainGenres,

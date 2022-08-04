@@ -3,29 +3,33 @@ import Features from '../models/features';
 
 export default class FeaturesService {
 
+  #wind;
+  #temp;
+
+  constructor() {
+    this.#wind = 0;
+    this.#temp = 0;
+  }
+  
   convertWeatherToFeatures(weather) {
-    const wind = Number(weather.wind);
-    const temp = Number(weather.temp);
+    this.#wind = Number(weather.wind);
+    this.#temp = Number(weather.temp);
     let audioFeatures = new Features('','','','',[]);
 
-    // this is horrible
-    if (weather.weatherId.startsWith('2')) {
-      audioFeatures.genreGroup.push(...genreGroups.thunderstormGenres);
-    } else if (weather.weatherId.startsWith('3')) {
-      audioFeatures.genreGroup.push(...genreGroups.drizzleGenres);
-    } else if (weather.weatherId.startsWith('5')) {
-      audioFeatures.genreGroup.push(...genreGroups.rainGenres);
-    } else if (weather.weatherId.startsWith('6')) {
-      audioFeatures.genreGroup.push(...genreGroups.snowGenres);
-    } else if (weather.weatherId.startsWith('7')) {
-      audioFeatures.genreGroup.push(...genreGroups.atmosphereGenres);
-    } else if (weather.weatherId === '800') {
+    if (weather.weatherId === '800') {
       audioFeatures.genreGroup.push(...genreGroups.clearGenres);
-    } else if (weather.weatherId.startsWith('8')) {
-      audioFeatures.genreGroup.push(...genreGroups.cloudGenres);
+    } else {
+      const genreGroup = genreGroups.groupMapper[weather.weatherId.charAt(0)];
+      audioFeatures.genreGroup.push(...genreGroups[genreGroup]);
     }
+    this.#parseDescription(weather.description, audioFeatures);
+    this.#energyFromWind(audioFeatures);
+    this.#propsFromTemp(audioFeatures);
+    return audioFeatures;
+  }
 
-    switch (weather.description) {
+  #parseDescription(description, audioFeatures) {
+    switch (description) {
       case ('Clear'):
         audioFeatures.maxValence = 0.6;
         audioFeatures.maxEnergy = 0.5;
@@ -61,50 +65,54 @@ export default class FeaturesService {
         audioFeatures.maxEnergy = 0.5;
         audioFeatures.mode = 1;
     }
+  }
 
+  #energyFromWind(audioFeatures) {
     switch (true) {
-      case (wind < 5):
+      case (this.#wind < 5):
         audioFeatures.maxEnergy += 0.025;
         break;
-      case (wind < 10):
+      case (this.#wind < 10):
         audioFeatures.maxEnergy += 0.05;
         break;
-      case (wind < 15):
+      case (this.#wind < 15):
         audioFeatures.maxEnergy += 0.075;
         break;
-      case (wind < 20):
+      case (this.#wind < 20):
         audioFeatures.maxEnergy += 0.075;
         break;
       default:
         audioFeatures.maxEnergy += 0;
         break;
     }
+  }
 
+  #propsFromTemp(audioFeatures) {
     switch (true) {
-      case (temp <= 5):
+      case (this.#temp <= 5):
         audioFeatures.maxTempo = 80;
         audioFeatures.maxValence -= 0.05;
         break;
-      case (temp <= 10):
+      case (this.#temp <= 10):
         audioFeatures.maxTempo = 90;
         audioFeatures.maxValence -= 0.025;
         break;
-      case (temp <= 15):
+      case (this.#temp <= 15):
         audioFeatures.maxTempo = 100;
         break;
-      case (temp <= 20):
+      case (this.#temp <= 20):
         audioFeatures.maxTempo = 110;
         audioFeatures.maxValence += 0.25;
         break;
-      case (temp <= 25):
+      case (this.#temp <= 25):
         audioFeatures.maxTempo = 120;
         audioFeatures.maxValence += 0.5;
         break;
-      case (temp <= 30):
+      case (this.#temp <= 30):
         audioFeatures.maxTempo = 130;
         audioFeatures.maxValence += 0.1;
         break;
-      case (temp > 30):
+      case (this.#temp > 30):
         audioFeatures.maxTempo = 140;
         audioFeatures.maxValence += 0.2;
         break;
@@ -112,6 +120,5 @@ export default class FeaturesService {
         audioFeatures.maxValence += 0;
         break;
     }
-    return audioFeatures;
   }
 }

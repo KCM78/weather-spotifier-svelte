@@ -4,13 +4,14 @@ module.exports = {
     sourceType: 'module'
   },
   env: {
-    es6: true,
     browser: true,
+    es2021: true,
     node: true
   },
   extends: [
     'eslint:recommended'
   ],
+  parser: '@babel/eslint-parser',
   plugins: [
     'svelte3'
   ],
